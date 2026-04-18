@@ -127,8 +127,9 @@ function renderSimpleListSection(title: string, items: string[]): string {
 
 export function buildResumeHtml(input: ResumeSchema): string {
   const resume = normalizeResume(input);
-  const screenPagePadding = "20mm";
-  const printPageMargin = "12mm";
+  const pageInset = "20mm";
+  const screenPagePadding = pageInset;
+  const printPageMargin = pageInset;
   const contactParts = [
     resume.basics.email,
     resume.basics.phone,

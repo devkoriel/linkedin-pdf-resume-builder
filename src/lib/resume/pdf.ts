@@ -4,7 +4,7 @@ type BrowserLike = {
 };
 
 type PageLike = {
-  emulateMediaType: (type: "screen") => Promise<void>;
+  emulateMediaType: (type: "print" | "screen") => Promise<void>;
   pdf: (options: PdfOptions) => Promise<ArrayBuffer | Buffer | Uint8Array>;
   setContent: (html: string, options: { waitUntil: "networkidle0" }) => Promise<void>;
   setViewport: (options: ViewportOptions) => Promise<void>;
@@ -61,7 +61,7 @@ export async function renderResumePdf(html: string, browserBinding?: unknown): P
       deviceScaleFactor: 1,
     });
     await page.setContent(html, { waitUntil: "networkidle0" });
-    await page.emulateMediaType("screen");
+    await page.emulateMediaType("print");
 
     const pdfBuffer = await page.pdf({
       format: "A4",
