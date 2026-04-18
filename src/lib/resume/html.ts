@@ -253,9 +253,7 @@ export function buildResumeHtml(input: ResumeSchema): string {
         margin-bottom: 12pt;
       }
       .section {
-        break-inside: avoid;
         margin-bottom: 12pt;
-        page-break-inside: avoid;
       }
       h2 {
         border-bottom: 0.75pt solid #dddddd;
@@ -278,6 +276,13 @@ export function buildResumeHtml(input: ResumeSchema): string {
         break-inside: avoid;
         margin-bottom: 10pt;
         page-break-inside: avoid;
+      }
+      .entry-header,
+      .entry-sub,
+      .entry-row,
+      .skill-row {
+        break-after: avoid;
+        page-break-after: avoid;
       }
       .entry-header {
         align-items: baseline;
