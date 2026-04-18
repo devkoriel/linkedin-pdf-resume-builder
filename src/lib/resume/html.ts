@@ -127,6 +127,8 @@ function renderSimpleListSection(title: string, items: string[]): string {
 
 export function buildResumeHtml(input: ResumeSchema): string {
   const resume = normalizeResume(input);
+  const screenPagePadding = "20mm";
+  const printPageMargin = "12mm";
   const contactParts = [
     resume.basics.email,
     resume.basics.phone,
@@ -213,7 +215,7 @@ export function buildResumeHtml(input: ResumeSchema): string {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      @page { margin: 20mm; size: A4; }
+      @page { margin: ${printPageMargin}; size: A4; }
       html { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: #ffffff; }
       body {
         background: #ffffff;
@@ -224,7 +226,7 @@ export function buildResumeHtml(input: ResumeSchema): string {
         margin: 0;
       }
       a { color: #222222; text-decoration: none; }
-      .page { padding: 20mm; }
+      .page { padding: ${screenPagePadding}; }
       @media print {
         .page { padding: 0; }
       }

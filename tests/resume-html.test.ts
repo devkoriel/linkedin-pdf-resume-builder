@@ -12,7 +12,7 @@ describe("buildResumeHtml", () => {
     expect(html).toContain("TECHNICAL SKILLS");
     expect(html).toContain("PROFESSIONAL EXPERIENCE");
     expect(html).toContain("font-family: \"Helvetica Neue\", Arial, \"Segoe UI\", sans-serif;");
-    expect(html).toContain("@page { margin: 20mm; size: A4; }");
+    expect(html).toContain("@page { margin: 12mm; size: A4; }");
     expect(html).toContain(".page { padding: 20mm; }");
     expect(html).toContain("@media print {");
     expect(html).toContain(".page { padding: 0; }");
