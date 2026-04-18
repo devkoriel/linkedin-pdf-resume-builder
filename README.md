@@ -6,7 +6,7 @@ Upload a LinkedIn profile PDF, turn it into a structured JSON Resume, edit it wi
 
 - Next.js 16 App Router
 - JSON Resume schema validation with Zod
-- LinkedIn PDF text extraction with `pdf-parse`
+- LinkedIn PDF text extraction with `pdfjs-serverless`
 - HTML-to-PDF rendering with Puppeteer locally
 - Cloudflare Browser Rendering for production on Workers
 

@@ -3,6 +3,7 @@
 import { useDeferredValue, useMemo, useState, useTransition } from "react";
 
 import { ResumeEditorForm } from "@/components/resume-editor-form";
+import { getApiErrorMessage, readApiPayload } from "@/lib/api-response";
 import { buildResumeHtml } from "@/lib/resume/html";
 import { createEmptyResume, normalizeResume, safeParseResume } from "@/lib/resume/schema";
 
@@ -50,12 +51,14 @@ export function ResumeWorkbench() {
       method: "POST",
       body,
     });
-    const payload = (await response.json()) as ParseResponse & {
-      error?: string;
-    };
+    const payload = await readApiPayload<ParseResponse>(response);
 
     if (!response.ok) {
-      throw new Error(payload.error ?? "Failed to parse the uploaded PDF.");
+      throw new Error(getApiErrorMessage(payload, "Failed to parse the uploaded PDF."));
+    }
+
+    if (!payload) {
+      throw new Error("The parse endpoint returned an empty response.");
     }
 
     const parsedResume = safeParseResume(payload.data.resume);
@@ -109,8 +112,8 @@ export function ResumeWorkbench() {
       });
 
       if (!response.ok) {
-        const payload = (await response.json()) as { error?: string };
-        throw new Error(payload.error ?? "Failed to generate the resume PDF.");
+        const payload = await readApiPayload<{ error?: string }>(response);
+        throw new Error(getApiErrorMessage(payload, "Failed to generate the resume PDF."));
       }
 
       const blob = await response.blob();

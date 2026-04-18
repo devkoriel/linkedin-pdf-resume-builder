@@ -1,4 +1,3 @@
-import { buildResumeHtml } from "@/lib/resume/html";
 import { parseLinkedInProfileText } from "@/lib/resume/linkedin-parser";
 import { extractPdfText } from "@/lib/resume/pdf-text";
 import { validatePdfUpload } from "@/lib/resume/upload-validation";
@@ -27,13 +26,11 @@ export async function POST(request: Request) {
     }
 
     const parsed = parseLinkedInProfileText(extractedText);
-    const html = buildResumeHtml(parsed.resume);
 
     return Response.json({
       data: {
         extractedText: parsed.normalizedText,
         fileName: file.name,
-        html,
         resume: parsed.resume,
         warnings: parsed.warnings,
       },
@@ -45,4 +42,3 @@ export async function POST(request: Request) {
     return Response.json({ error: message }, { status: 500 });
   }
 }
-

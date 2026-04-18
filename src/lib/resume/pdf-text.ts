@@ -1,33 +1,63 @@
-import { PDFParse } from "pdf-parse";
-import { WorkerMessageHandler } from "pdfjs-dist/legacy/build/pdf.worker.mjs";
+import { getDocument } from "pdfjs-serverless";
 
-let pdfWorkerConfigured = false;
+interface PdfTextItem {
+  hasEOL?: boolean;
+  str?: string;
+}
 
-type PdfJsWorkerGlobal = typeof globalThis & {
-  pdfjsWorker?: {
-    WorkerMessageHandler: typeof WorkerMessageHandler;
-  };
-};
+function normalizePageText(items: PdfTextItem[]): string {
+  const chunks: string[] = [];
 
-function ensurePdfWorker() {
-  if (pdfWorkerConfigured) {
-    return;
+  for (const item of items) {
+    const value = item.str ?? "";
+
+    if (item.hasEOL) {
+      if (value.trim()) {
+        chunks.push(value.trim());
+      }
+
+      chunks.push("\n");
+      continue;
+    }
+
+    if (!value) {
+      continue;
+    }
+
+    chunks.push(value);
   }
 
-  (globalThis as PdfJsWorkerGlobal).pdfjsWorker = { WorkerMessageHandler };
-  pdfWorkerConfigured = true;
+  return chunks
+    .join("")
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n[ \t]+/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }
 
 export async function extractPdfText(buffer: Buffer): Promise<string> {
-  ensurePdfWorker();
-
-  const parser = new PDFParse({ data: buffer });
+  const loadingTask = getDocument({
+    data: new Uint8Array(buffer),
+    useSystemFonts: true,
+  });
+  const document = await loadingTask.promise;
 
   try {
-    const textResult = await parser.getText();
+    const pages: string[] = [];
 
-    return textResult.text.trim();
+    for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
+      const page = await document.getPage(pageNumber);
+      const textContent = await page.getTextContent();
+      const pageText = normalizePageText(textContent.items as PdfTextItem[]);
+
+      if (pageText) {
+        pages.push(pageText);
+      }
+    }
+
+    return pages.join("\n\n").trim();
   } finally {
-    await parser.destroy();
+    await loadingTask.destroy();
   }
 }
