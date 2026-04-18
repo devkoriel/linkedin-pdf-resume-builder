@@ -213,7 +213,7 @@ export function buildResumeHtml(input: ResumeSchema): string {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      @page { margin: 0; size: A4; }
+      @page { margin: 20mm; size: A4; }
       html { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: #ffffff; }
       body {
         background: #ffffff;
@@ -224,7 +224,7 @@ export function buildResumeHtml(input: ResumeSchema): string {
         margin: 0;
       }
       a { color: #222222; text-decoration: none; }
-      .page { padding: 20mm; }
+      .page { padding: 0; }
       h1 {
         font-size: 22pt;
         font-weight: 700;
