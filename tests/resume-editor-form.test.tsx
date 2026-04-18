@@ -26,9 +26,9 @@ describe("ResumeEditorForm", () => {
     expect(screen.getByText("Technical Skills")).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText("Full name"), {
-      target: { value: "Jinsoo Heo" },
+      target: { value: "Alex Morgan" },
     });
 
-    expect(screen.getByTestId("resume-name")).toHaveTextContent("Jinsoo Heo");
+    expect(screen.getByTestId("resume-name")).toHaveTextContent("Alex Morgan");
   });
 });

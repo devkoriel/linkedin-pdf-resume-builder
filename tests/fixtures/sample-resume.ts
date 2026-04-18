@@ -1,32 +1,32 @@
 export const sampleResume = {
   $schema: "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
   basics: {
-    name: "Jinsoo Heo",
+    name: "Alex Morgan",
     label: "DevOps Engineer",
-    email: "dev.koriel@gmail.com",
-    phone: "+82 10-8975-9546",
-    url: "https://koriel.kr",
+    email: "alex@example.com",
+    phone: "+1 555-0100",
+    url: "https://portfolio.example",
     summary:
       "DevOps Engineer with 8+ years of experience building and operating production infrastructure at scale.",
     location: {
-      city: "Seoul",
-      countryCode: "KR",
+      city: "Singapore",
+      countryCode: "SG",
     },
     profiles: [
       {
         network: "GitHub",
-        username: "devkoriel",
-        url: "https://github.com/devkoriel",
+        username: "alexmorgan",
+        url: "https://github.com/alexmorgan",
       },
       {
         network: "LinkedIn",
-        username: "devkoriel",
-        url: "https://linkedin.com/in/devkoriel",
+        username: "alexmorgan",
+        url: "https://linkedin.com/in/alexmorgan",
       },
       {
         network: "X",
-        username: "devkoriel",
-        url: "https://x.com/devkoriel",
+        username: "alexmorgan",
+        url: "https://x.com/alexmorgan",
       },
     ],
   },

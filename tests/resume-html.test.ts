@@ -8,7 +8,7 @@ describe("buildResumeHtml", () => {
   it("renders the exact visual conventions from the target PDF", () => {
     const html = buildResumeHtml(sampleResume);
 
-    expect(html).toContain("Jinsoo Heo");
+    expect(html).toContain("Alex Morgan");
     expect(html).toContain("TECHNICAL SKILLS");
     expect(html).toContain("PROFESSIONAL EXPERIENCE");
     expect(html).toContain("font-family: \"Helvetica Neue\", Arial, \"Segoe UI\", sans-serif;");

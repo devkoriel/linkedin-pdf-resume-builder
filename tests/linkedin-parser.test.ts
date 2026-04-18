@@ -9,17 +9,17 @@ describe("parseLinkedInProfileText", () => {
     const result = parseLinkedInProfileText(linkedInProfileText);
 
     expect(result.warnings).toEqual([]);
-    expect(result.resume.basics.name).toBe("Jinsoo Heo");
+    expect(result.resume.basics.name).toBe("Alex Morgan");
     expect(result.resume.basics.label).toBe(
       "DevOps Engineer @ Chronicle | ex-Upbit, ex-PUBG | Kubernetes, GitOps & eBPF | Web3 Infrastructure",
     );
-    expect(result.resume.basics.email).toBe("dev.koriel@gmail.com");
-    expect(result.resume.basics.phone).toBe("+821089759546");
-    expect(result.resume.basics.url).toBe("https://koriel.kr");
+    expect(result.resume.basics.email).toBe("alex@example.com");
+    expect(result.resume.basics.phone).toBe("+12025550100");
+    expect(result.resume.basics.url).toBe("https://portfolio.example");
     expect(result.resume.basics.profiles).toContainEqual({
       network: "LinkedIn",
-      username: "devkoriel",
-      url: "https://www.linkedin.com/in/devkoriel",
+      username: "alexmorgan",
+      url: "https://www.linkedin.com/in/alexmorgan",
     });
     expect(result.resume.basics.summary).toContain("Site Reliability Engineer");
     expect(result.resume.work[0]).toMatchObject({
@@ -69,16 +69,16 @@ describe("parseLinkedInProfileText", () => {
   });
 
   it("returns warnings when key sections are missing", () => {
-    const result = parseLinkedInProfileText("Jinsoo Heo\nDevOps Engineer");
+    const result = parseLinkedInProfileText("Alex Morgan\nDevOps Engineer");
 
-    expect(result.resume.basics.name).toBe("Jinsoo Heo");
+    expect(result.resume.basics.name).toBe("Alex Morgan");
     expect(result.warnings).toContain("No Experience section detected.");
     expect(result.warnings).toContain("No Skills section detected.");
   });
 
   it("keeps nested role entries attached to the same company and repairs wrapped highlights", () => {
     const result = parseLinkedInProfileText(`
-Jinsoo Heo
+Alex Morgan
 DevOps Engineer
 Summary
 Infrastructure engineer
@@ -87,30 +87,30 @@ PUBG Corporation
 1 year 9 months
 Lead of Network Security Part
 December 2021 - June 2022 (7 months)
-Seocho District
+Central District
 Promoted to Lead of Network Security Part, directing infrastructure defense
 strategy for PUBG: NEW STATE
 DevSecOps Engineer
 October 2020 - December 2021 (1 year 3 months)
-Seocho District
+Central District
 Developed eBPF programs (XDP ingress + TC egress) to protect infrastructure
 from DDoS attacks
 LUXROBO
 2 years 8 months
 DevOps Technical Lead
 December 2018 - November 2019 (1 year)
-Seocho-gu, Seoul, Korea
+Central District, Singapore
 Designed software architecture and managed code reviews via GitLab MR +
 Jenkins
 Migrated C++ build system to CMake, achieving 10x improvement in build time
 and binary size
 SW Dev. Team Manager
 July 2017 - December 2018 (1 year 6 months)
-Seoul
+Singapore
 Managed software development team
 Software Engineer
 April 2017 - July 2017 (4 months)
-Seoul
+Singapore
 Built JIRA and Confluence on in-house servers
 Top Skills
 Docker

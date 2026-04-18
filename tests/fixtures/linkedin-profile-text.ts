@@ -1,12 +1,12 @@
 export const linkedInProfileText = `
 Contact
-+821089759546 (Mobile)
-dev.koriel@gmail.com
-www.linkedin.com/in/devkoriel
++12025550100 (Mobile)
+alex@example.com
+www.linkedin.com/in/alexmorgan
 (LinkedIn)
-koriel.kr (Personal)
-blog.koriel.kr (Blog)
-blog.naver.com/peter_jinsoo/ (Blog)
+portfolio.example (Personal)
+blog.example.com (Blog)
+notes.example.com (Blog)
 Top Skills
 GitHub Actions
 Docker
@@ -19,7 +19,7 @@ Korea Robot Aircraft Competition
 Publications
 마이크로소프트웨어 394호 클라우드
 혹은 도전(CLOUD or DARE)
-Jinsoo Heo
+Alex Morgan
 DevOps Engineer @ Chronicle | ex-Upbit, ex-PUBG | Kubernetes,
 GitOps & eBPF | Web3 Infrastructure
 South Korea
@@ -31,7 +31,7 @@ Experience
 Chronicle Labs | Protocol
 DevOps Engineer
 January 2026 - Present (4 months)
-Seoul, South Korea
+Singapore
 Build and operate Kubernetes-based oracle infrastructure on AWS EKS,
 managing the full lifecycle of oracle services
 through an ArgoCD GitOps app-of-apps pattern
@@ -45,7 +45,7 @@ downtime directly impacts DeFi protocol solvency
 Dunamu
 DevOps Engineer
 October 2023 - October 2025 (2 years 1 month)
-Seocho District
+Central District
 Managed Kubernetes clusters on AWS (EKS and kOps) serving South Korea's
 largest crypto exchange
 Enforced end-to-end network security using Istio service mesh across all
@@ -61,7 +61,7 @@ Developed internal DevOps and SRE tooling in Go and Python
 Karrot
 Site Reliability Engineer
 June 2022 - October 2023 (1 year 5 months)
-Seocho District
+Central District
 Stabilized network and Kubernetes clusters as part of the SRE Cluster team
 Operated HAProxy fleet with bot and abuser detection at the edge
 Built log and metrics delivery pipelines with Grafana dashboards
@@ -71,12 +71,12 @@ PUBG Corporation
 1 year 9 months
 Lead of Network Security Part
 December 2021 - June 2022 (7 months)
-Seocho District
+Central District
 Promoted to Lead of Network Security Part, directing infrastructure defense
 strategy for PUBG: NEW STATE
 DevSecOps Engineer
 October 2020 - December 2021 (1 year 3 months)
-Seocho District
+Central District
 Promoted to Lead of Network Security Part, directing infrastructure defense
 strategy for PUBG: NEW STATE
 Developed eBPF programs (XDP ingress + TC egress) to protect infrastructure

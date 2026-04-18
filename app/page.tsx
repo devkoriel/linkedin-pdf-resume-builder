@@ -25,8 +25,8 @@ export default function Home() {
             <p className="eyebrow">Built by</p>
             <p className="developer-name">Jinsoo Heo / devkoriel</p>
             <p className="developer-copy">
-              DevOps Engineer building infrastructure, automation, and resume
-              tooling that stays compatible with global ATS workflows.
+              8+ years in software engineering. Building infrastructure for DeFi
+              protocols. Remote worker from Seoul.
             </p>
             <div className="developer-links">
               <a href="https://koriel.kr" rel="noreferrer" target="_blank">

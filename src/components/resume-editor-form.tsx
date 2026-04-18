@@ -171,7 +171,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
                   },
                 }))
               }
-              placeholder="Jinsoo Heo"
+              placeholder="Alex Morgan"
               type="text"
               value={resume.basics.name}
             />
@@ -205,7 +205,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
                   },
                 }))
               }
-              placeholder="dev.koriel@gmail.com"
+              placeholder="alex@example.com"
               type="email"
               value={resume.basics.email}
             />
@@ -222,7 +222,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
                   },
                 }))
               }
-              placeholder="+82 10-8975-9546"
+              placeholder="+1 555-0100"
               type="text"
               value={resume.basics.phone}
             />
@@ -239,7 +239,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
                   },
                 }))
               }
-              placeholder="https://koriel.kr"
+              placeholder="https://portfolio.example"
               type="url"
               value={resume.basics.url}
             />
@@ -259,7 +259,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
                   },
                 }))
               }
-              placeholder="Seoul"
+              placeholder="Singapore"
               type="text"
               value={resume.basics.location.city}
             />
@@ -372,7 +372,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
                           },
                         }))
                       }
-                      placeholder="devkoriel"
+                      placeholder="alexmorgan"
                       type="text"
                       value={profile.username}
                     />
@@ -392,7 +392,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
                           },
                         }))
                       }
-                      placeholder="https://github.com/devkoriel"
+                      placeholder="https://github.com/alexmorgan"
                       type="url"
                       value={profile.url}
                     />
