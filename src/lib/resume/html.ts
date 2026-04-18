@@ -224,7 +224,10 @@ export function buildResumeHtml(input: ResumeSchema): string {
         margin: 0;
       }
       a { color: #222222; text-decoration: none; }
-      .page { padding: 0; }
+      .page { padding: 20mm; }
+      @media print {
+        .page { padding: 0; }
+      }
       h1 {
         font-size: 22pt;
         font-weight: 700;

@@ -13,6 +13,8 @@ describe("buildResumeHtml", () => {
     expect(html).toContain("PROFESSIONAL EXPERIENCE");
     expect(html).toContain("font-family: \"Helvetica Neue\", Arial, \"Segoe UI\", sans-serif;");
     expect(html).toContain("@page { margin: 20mm; size: A4; }");
+    expect(html).toContain(".page { padding: 20mm; }");
+    expect(html).toContain("@media print {");
     expect(html).toContain(".page { padding: 0; }");
     expect(html).toContain("font-size: 8.5pt;");
     expect(html).toContain("letter-spacing: 0.8pt;");

@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeferredValue, useEffect, useMemo, useState, useTransition } from "react";
+import { useDeferredValue, useMemo, useState, useTransition } from "react";
 
 import { ResumeEditorForm } from "@/components/resume-editor-form";
 import { getApiErrorMessage, readApiPayload } from "@/lib/api-response";
@@ -16,7 +16,7 @@ interface ParseResponse {
   };
 }
 
-async function requestPdfBlob(targetResume: unknown, signal?: AbortSignal) {
+async function requestPdfBlob(targetResume: unknown) {
   const response = await fetch("/api/resume/pdf", {
     method: "POST",
     headers: {
@@ -25,7 +25,6 @@ async function requestPdfBlob(targetResume: unknown, signal?: AbortSignal) {
     body: JSON.stringify({
       resume: targetResume,
     }),
-    signal,
   });
 
   if (!response.ok) {
@@ -55,9 +54,6 @@ export function ResumeWorkbench() {
     resumeName: string;
   } | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewPdfUrl, setPreviewPdfUrl] = useState<string | null>(null);
-  const [previewError, setPreviewError] = useState("");
-  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [isDownloading, setIsDownloading] = useState(false);
   const deferredResume = useDeferredValue(resume);
@@ -68,72 +64,6 @@ export function ResumeWorkbench() {
   );
   const previewHtml = useMemo(() => buildResumeHtml(deferredNormalizedResume), [deferredNormalizedResume]);
   const resumeJson = useMemo(() => JSON.stringify(normalizedResume, null, 2), [normalizedResume]);
-  const shouldGeneratePdfPreview = useMemo(
-    () =>
-      Boolean(
-        deferredNormalizedResume.basics.name ||
-          deferredNormalizedResume.basics.label ||
-          deferredNormalizedResume.basics.summary ||
-          deferredNormalizedResume.work.length ||
-          deferredNormalizedResume.skills.length ||
-          deferredNormalizedResume.education.length,
-      ),
-    [deferredNormalizedResume],
-  );
-
-  useEffect(() => {
-    return () => {
-      if (previewPdfUrl) {
-        URL.revokeObjectURL(previewPdfUrl);
-      }
-    };
-  }, [previewPdfUrl]);
-
-  useEffect(() => {
-    if (!shouldGeneratePdfPreview) {
-      return;
-    }
-
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => {
-      setIsPreviewLoading(true);
-
-      void requestPdfBlob(deferredNormalizedResume, controller.signal)
-        .then((blob) => {
-          const nextUrl = URL.createObjectURL(blob);
-
-          setPreviewPdfUrl((currentUrl) => {
-            if (currentUrl) {
-              URL.revokeObjectURL(currentUrl);
-            }
-
-            return nextUrl;
-          });
-          setPreviewError("");
-        })
-        .catch((error: unknown) => {
-          if (controller.signal.aborted) {
-            return;
-          }
-
-          const message =
-            error instanceof Error ? error.message : "Failed to update the PDF preview.";
-
-          setPreviewError(message);
-        })
-        .finally(() => {
-          if (!controller.signal.aborted) {
-            setIsPreviewLoading(false);
-          }
-        });
-    }, 700);
-
-    return () => {
-      controller.abort();
-      window.clearTimeout(timeout);
-    };
-  }, [deferredNormalizedResume, shouldGeneratePdfPreview]);
-
   async function parseSelectedFile(file: File) {
     const body = new FormData();
 
@@ -312,19 +242,17 @@ export function ResumeWorkbench() {
       <div className="panel preview-panel">
         <div className="panel-header">
           <p className="eyebrow">Output</p>
-          <h2>Live PDF preview</h2>
+          <h2>Live resume preview</h2>
           <p className="lede">
-            This preview uses the actual generated PDF inside the browser viewer so
-            the on-page result matches the downloaded file, including pagination.
+            This preview uses the same HTML renderer as the downloadable PDF, so the
+            editing surface stays fast and readable while PDF generation runs only
+            when you explicitly download it.
           </p>
         </div>
         <div className="preview-shell">
-          {isPreviewLoading ? <p className="preview-status">Updating PDF preview...</p> : null}
-          {previewError ? <p className="error-inline">{previewError}</p> : null}
           <iframe
             className="preview-frame"
-            src={previewPdfUrl ?? undefined}
-            srcDoc={previewPdfUrl ? undefined : previewHtml}
+            srcDoc={previewHtml}
             title="Resume preview"
           />
         </div>
