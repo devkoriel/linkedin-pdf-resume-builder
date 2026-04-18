@@ -13,6 +13,17 @@ function makeAttachmentName(name: string) {
   return `${slug || "resume"}.pdf`;
 }
 
+async function getCloudflareBrowserBinding() {
+  try {
+    const cloudflare = await import("@opennextjs/cloudflare");
+    const context = cloudflare.getCloudflareContext();
+
+    return (context.env as { BROWSER?: unknown }).BROWSER;
+  } catch {
+    return undefined;
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as { resume?: unknown };
@@ -25,7 +36,8 @@ export async function POST(request: Request) {
     }
 
     const html = buildResumeHtml(validation.data);
-    const pdf = await renderResumePdf(html);
+    const browserBinding = await getCloudflareBrowserBinding();
+    const pdf = await renderResumePdf(html, browserBinding);
     const attachmentName = makeAttachmentName(validation.data.basics.name);
 
     return new Response(new Uint8Array(pdf), {
