@@ -1,8 +1,39 @@
 import { ResumeWorkbench } from "@/components/resume-workbench";
+import { siteConfig } from "@/lib/site";
 
 export default function Home() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: siteConfig.name,
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    description: siteConfig.description,
+    url: siteConfig.url,
+    creator: {
+      "@type": "Person",
+      name: siteConfig.creator.name,
+      url: siteConfig.creator.url,
+    },
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+    featureList: [
+      "Upload and parse LinkedIn profile PDFs",
+      "Edit resume data field by field",
+      "Export ATS-safe resume PDFs",
+      "Download JSON Resume output",
+    ],
+  };
+
   return (
     <main className="shell">
+      <script
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        type="application/ld+json"
+      />
       <section className="hero">
         <div className="hero-copy">
           <p className="hero-kicker">LinkedIn PDF → JSON Resume → ATS PDF</p>

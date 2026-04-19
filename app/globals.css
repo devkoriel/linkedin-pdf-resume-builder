@@ -35,6 +35,28 @@ body {
   min-height: 100vh;
 }
 
+::selection {
+  background: rgba(15, 118, 110, 0.18);
+}
+
+a,
+button,
+input,
+textarea,
+summary {
+  outline: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.18);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 button,
 input,
 textarea {
@@ -679,6 +701,28 @@ textarea {
   }
   50% {
     transform: translateX(360%) skewX(-18deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .hero-copy,
+  .hero-card,
+  .panel {
+    opacity: 1;
+    transform: none;
+  }
+
+  .preview-shell::before {
+    animation: none;
   }
 }
 
