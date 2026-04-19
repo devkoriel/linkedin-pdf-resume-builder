@@ -58,13 +58,13 @@ function monthValueToDate(value: string): string {
 }
 
 function dateToYearValue(date?: string): string {
-  return date ? date.slice(0, 4) : "";
+  return date ? date.split("-")[0] ?? "" : "";
 }
 
 function yearValueToDate(value: string): string {
-  const year = value.trim();
+  const year = value.replace(/\D/g, "").slice(0, 4);
 
-  return year ? `${year}-01-01` : "";
+  return year;
 }
 
 function EditorSection({
@@ -317,7 +317,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
         ) : (
           <div className="editor-list">
             {resume.basics.profiles.map((profile, index) => (
-              <article className="editor-card" key={`${profile.url}-${index}`}>
+              <article className="editor-card" key={`profile-${index}`}>
                 <div className="card-header">
                   <p className="card-index">Profile {index + 1}</p>
                   <button
@@ -450,7 +450,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
         ) : (
           <div className="editor-list">
             {resume.skills.map((skill, index) => (
-              <article className="editor-card" key={`${skill.name}-${index}`}>
+              <article className="editor-card" key={`skill-group-${index}`}>
                 <div className="card-header">
                   <p className="card-index">Skill group {index + 1}</p>
                   <button
@@ -503,7 +503,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
                     </button>
                   </div>
                   {skill.keywords.map((keyword, keywordIndex) => (
-                    <div className="inline-row" key={`${keyword}-${keywordIndex}`}>
+                    <div className="inline-row" key={`skill-${index}-keyword-${keywordIndex}`}>
                       <input
                         className="text-input"
                         onChange={(event) =>
@@ -570,7 +570,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
         ) : (
           <div className="editor-list">
             {resume.work.map((entry, index) => (
-              <article className="editor-card editor-card-dense" key={`${entry.name}-${entry.position}-${index}`}>
+              <article className="editor-card editor-card-dense" key={`work-${index}`}>
                 <div className="card-header">
                   <p className="card-index">Experience {index + 1}</p>
                   <button
@@ -711,7 +711,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
                     <p className="empty-inline">No bullet points yet.</p>
                   ) : (
                     entry.highlights.map((highlight, highlightIndex) => (
-                      <div className="inline-row" key={`${highlight}-${highlightIndex}`}>
+                      <div className="inline-row" key={`work-${index}-highlight-${highlightIndex}`}>
                         <textarea
                           className="text-area text-area-compact"
                           onChange={(event) =>
@@ -779,7 +779,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
         ) : (
           <div className="editor-list">
             {resume.education.map((entry, index) => (
-              <article className="editor-card" key={`${entry.institution}-${index}`}>
+              <article className="editor-card" key={`education-${index}`}>
                 <div className="card-header">
                   <p className="card-index">Education {index + 1}</p>
                   <button
@@ -909,7 +909,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
         ) : (
           <div className="editor-list">
             {resume.publications.map((entry, index) => (
-              <article className="editor-card" key={`${entry.name}-${index}`}>
+              <article className="editor-card" key={`publication-${index}`}>
                 <div className="card-header">
                   <p className="card-index">Publication {index + 1}</p>
                   <button
@@ -1009,7 +1009,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
         ) : (
           <div className="editor-list">
             {resume.awards.map((entry, index) => (
-              <article className="editor-card" key={`${entry.title}-${index}`}>
+              <article className="editor-card" key={`award-${index}`}>
                 <div className="card-header">
                   <p className="card-index">Award {index + 1}</p>
                   <button
@@ -1109,7 +1109,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
         ) : (
           <div className="editor-list">
             {resume.languages.map((entry, index) => (
-              <article className="editor-card" key={`${entry.language}-${index}`}>
+              <article className="editor-card" key={`language-${index}`}>
                 <div className="card-header">
                   <p className="card-index">Language {index + 1}</p>
                   <button
