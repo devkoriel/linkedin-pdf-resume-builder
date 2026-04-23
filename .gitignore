@@ -5,6 +5,9 @@ coverage
 node_modules
 npm-debug.log*
 playwright-report
+.playwright-mcp
+verify-*.png
+snap-*.yml
 .DS_Store
 *.tsbuildinfo
 cloudflare-env.d.ts

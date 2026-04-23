@@ -21,7 +21,7 @@ interface EditorSectionProps {
   action?: ReactNode;
   children: ReactNode;
   description: string;
-  eyebrow?: string;
+  index: string;
   title: string;
 }
 
@@ -67,22 +67,18 @@ function yearValueToDate(value: string): string {
   return year;
 }
 
-function EditorSection({
-  action,
-  children,
-  description,
-  eyebrow = "Guided editor",
-  title,
-}: EditorSectionProps) {
+function EditorSection({ action, children, description, index, title }: EditorSectionProps) {
   return (
     <section className="editor-section">
       <div className="editor-section-header">
         <div>
-          <p className="eyebrow">{eyebrow}</p>
-          <h3>{title}</h3>
-          <p className="hint">{description}</p>
+          <h3 className="editor-section-heading">
+            <span className="editor-section-index">{index}</span>
+            {title}
+          </h3>
+          <p className="editor-section-description">{description}</p>
         </div>
-        {action ? <div className="editor-section-action">{action}</div> : null}
+        {action ? <div>{action}</div> : null}
       </div>
       {children}
     </section>
@@ -156,6 +152,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
     <div className="guided-form">
       <EditorSection
         description="This controls the header block at the top of the PDF."
+        index="01"
         title="Basics"
       >
         <div className="editor-grid editor-grid-two">
@@ -310,6 +307,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
           </button>
         }
         description="These render as the second contact line beneath the website."
+        index="02"
         title="Profiles"
       >
         {resume.basics.profiles.length === 0 ? (
@@ -318,7 +316,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
           <div className="editor-list">
             {resume.basics.profiles.map((profile, index) => (
               <article className="editor-card" key={`profile-${index}`}>
-                <div className="card-header">
+                <div className="sub-card-header">
                   <p className="card-index">Profile {index + 1}</p>
                   <button
                     className="mini-button mini-button-danger"
@@ -406,6 +404,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
 
       <EditorSection
         description="Keep this to 2-4 crisp lines. It becomes the paragraph directly under the divider."
+        index="03"
         title="Summary"
       >
         <Field label="Professional summary">
@@ -443,6 +442,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
           </button>
         }
         description="Follow the exact category-row format from your reference PDF."
+        index="04"
         title="Technical Skills"
       >
         {resume.skills.length === 0 ? (
@@ -451,7 +451,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
           <div className="editor-list">
             {resume.skills.map((skill, index) => (
               <article className="editor-card" key={`skill-group-${index}`}>
-                <div className="card-header">
+                <div className="sub-card-header">
                   <p className="card-index">Skill group {index + 1}</p>
                   <button
                     className="mini-button mini-button-danger"
@@ -563,6 +563,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
           </button>
         }
         description="Each entry should map to one company/title block in the final PDF."
+        index="05"
         title="Professional Experience"
       >
         {resume.work.length === 0 ? (
@@ -571,7 +572,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
           <div className="editor-list">
             {resume.work.map((entry, index) => (
               <article className="editor-card editor-card-dense" key={`work-${index}`}>
-                <div className="card-header">
+                <div className="sub-card-header">
                   <p className="card-index">Experience {index + 1}</p>
                   <button
                     className="mini-button mini-button-danger"
@@ -772,6 +773,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
           </button>
         }
         description="Keep institution first, then the degree/area line."
+        index="06"
         title="Education"
       >
         {resume.education.length === 0 ? (
@@ -780,7 +782,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
           <div className="editor-list">
             {resume.education.map((entry, index) => (
               <article className="editor-card" key={`education-${index}`}>
-                <div className="card-header">
+                <div className="sub-card-header">
                   <p className="card-index">Education {index + 1}</p>
                   <button
                     className="mini-button mini-button-danger"
@@ -902,6 +904,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
           </button>
         }
         description="Shown as a simple bullet list with publisher and year."
+        index="07"
         title="Publications"
       >
         {resume.publications.length === 0 ? (
@@ -910,7 +913,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
           <div className="editor-list">
             {resume.publications.map((entry, index) => (
               <article className="editor-card" key={`publication-${index}`}>
-                <div className="card-header">
+                <div className="sub-card-header">
                   <p className="card-index">Publication {index + 1}</p>
                   <button
                     className="mini-button mini-button-danger"
@@ -1002,6 +1005,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
           </button>
         }
         description="Keep these concise. The renderer only needs title, issuer, and year."
+        index="08"
         title="Awards"
       >
         {resume.awards.length === 0 ? (
@@ -1010,7 +1014,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
           <div className="editor-list">
             {resume.awards.map((entry, index) => (
               <article className="editor-card" key={`award-${index}`}>
-                <div className="card-header">
+                <div className="sub-card-header">
                   <p className="card-index">Award {index + 1}</p>
                   <button
                     className="mini-button mini-button-danger"
@@ -1102,6 +1106,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
           </button>
         }
         description="Shown as a single comma-separated line at the bottom of the PDF."
+        index="09"
         title="Languages"
       >
         {resume.languages.length === 0 ? (
@@ -1110,7 +1115,7 @@ export function ResumeEditorForm({ resume, setResume }: ResumeEditorFormProps) {
           <div className="editor-list">
             {resume.languages.map((entry, index) => (
               <article className="editor-card" key={`language-${index}`}>
-                <div className="card-header">
+                <div className="sub-card-header">
                   <p className="card-index">Language {index + 1}</p>
                   <button
                     className="mini-button mini-button-danger"

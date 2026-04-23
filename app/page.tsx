@@ -1,5 +1,32 @@
+import Link from "next/link";
+
 import { ResumeWorkbench } from "@/components/resume-workbench";
 import { siteConfig } from "@/lib/site";
+
+const steps = [
+  {
+    num: "01",
+    title: "Upload",
+    body: "Drop in the LinkedIn profile PDF. We extract it locally in the request and never store it.",
+  },
+  {
+    num: "02",
+    title: "Refine",
+    body: "Review each field in a guided editor. Fix headlines, rephrase bullets, group skills by category.",
+  },
+  {
+    num: "03",
+    title: "Export",
+    body: "Download an ATS-safe PDF rendered from system fonts, or the raw JSON Resume for any pipeline.",
+  },
+];
+
+const heroBullets = [
+  "Guided, field-by-field editing — not a raw JSON escape hatch.",
+  "System-font, ATS-parsable PDF rendered from HTML.",
+  "Uppercase section rails, right-aligned dates, italic company lines.",
+  "JSON Resume export preserved for downstream automation.",
+];
 
 export default function Home() {
   const jsonLd = {
@@ -29,56 +56,98 @@ export default function Home() {
   };
 
   return (
-    <main className="shell">
+    <>
       <script
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         type="application/ld+json"
       />
-      <section className="hero">
-        <div className="hero-copy">
-          <p className="hero-kicker">LinkedIn PDF → JSON Resume → ATS PDF</p>
-          <h1>Turn a LinkedIn export into the exact resume format you already ship.</h1>
-          <p className="hero-body">
-            Upload the profile PDF, guide each parsed field in a structured editor,
-            then export a polished PDF that mirrors the layout at
-            <span className="inline-link"> koriel.kr/resume/resume.pdf</span>.
-          </p>
-        </div>
-        <div className="hero-card stack-card">
-          <p className="eyebrow">Format targets</p>
-          <ul className="hero-list">
-            <li>Guided field-by-field editing instead of raw JSON-only cleanup</li>
-            <li>System-font, ATS-safe HTML-to-PDF rendering</li>
-            <li>Uppercase section rails, right-aligned dates, and italic company summaries</li>
-            <li>JSON Resume export still available for advanced workflows</li>
-          </ul>
-          <div className="developer-card">
-            <p className="eyebrow">Built by</p>
-            <p className="developer-name">Jinsoo Heo / devkoriel</p>
-            <p className="developer-copy">
-              8+ years in software engineering. Building infrastructure for DeFi
-              protocols. Remote worker from Seoul.
-            </p>
-            <div className="developer-links">
-              <a href="https://koriel.kr" rel="noreferrer" target="_blank">
-                koriel.kr
-              </a>
-              <a
-                href="https://blog.koriel.kr/posts/json-resume-pdf-automation"
-                rel="noreferrer"
-                target="_blank"
-              >
-                Blog post
-              </a>
-              <a href="https://www.linkedin.com/in/devkoriel" rel="noreferrer" target="_blank">
-                LinkedIn
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+      <header className="topbar">
+        <Link className="brand" href="/">
+          <span aria-hidden="true" className="brand-mark">
+            JR
+          </span>
+          <span>Resume Builder</span>
+        </Link>
+        <nav aria-label="External links" className="topbar-meta">
+          <a href={siteConfig.creator.blog} rel="noreferrer" target="_blank">
+            Blog post
+          </a>
+          <span aria-hidden="true" className="sep">
+            /
+          </span>
+          <a
+            href={siteConfig.creator.linkedIn}
+            rel="noreferrer"
+            target="_blank"
+          >
+            LinkedIn
+          </a>
+          <span aria-hidden="true" className="sep">
+            /
+          </span>
+          <a href={siteConfig.creator.url} rel="noreferrer" target="_blank">
+            koriel.kr
+          </a>
+        </nav>
+      </header>
 
-      <ResumeWorkbench />
-    </main>
+      <main className="shell">
+        <section className="hero">
+          <div>
+            <p className="hero-kicker">LinkedIn PDF → JSON Resume → ATS PDF</p>
+            <h1>
+              Turn a LinkedIn export into a resume that passes the scanners.
+            </h1>
+            <p className="hero-body">
+              Upload the PDF, guide each parsed field in a structured editor,
+              then export the same polished layout shipped at
+              <span className="inline-link"> koriel.kr/resume/resume.pdf</span>.
+              Works globally, in any language LinkedIn exports.
+            </p>
+
+            <ol className="stepper" role="list">
+              {steps.map((step) => (
+                <li className="step" key={step.num}>
+                  <span className="step-num">— {step.num}</span>
+                  <span className="step-title">{step.title}</span>
+                  <span className="step-body">{step.body}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <aside className="hero-aside">
+            <p className="eyebrow">What you get</p>
+            <p className="hero-aside-title">
+              A format that reads cleanly on both sides.
+            </p>
+            <ul className="hero-list">
+              {heroBullets.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </aside>
+        </section>
+
+        <ResumeWorkbench />
+
+        <footer className="signature">
+          <div>
+            Built by{" "}
+            <a href={siteConfig.creator.url} rel="noreferrer" target="_blank">
+              {siteConfig.creator.name} / devkoriel
+            </a>{" "}
+            — 8+ years in software engineering, remote from Seoul.
+          </div>
+          <div className="signature-group">
+            <span>Hosted on Cloudflare Workers</span>
+            <span aria-hidden="true">·</span>
+            <a href={siteConfig.creator.blog} rel="noreferrer" target="_blank">
+              Read the blog post
+            </a>
+          </div>
+        </footer>
+      </main>
+    </>
   );
 }

@@ -109,15 +109,39 @@ const SKILL_CATEGORY_RULES = [
   },
   {
     category: "Infrastructure as Code",
-    keywords: ["ansible", "cloudformation", "hcl", "ipfs", "pulumi", "terraform"],
+    keywords: [
+      "ansible",
+      "cloudformation",
+      "hcl",
+      "ipfs",
+      "pulumi",
+      "terraform",
+    ],
   },
   {
     category: "Observability",
-    keywords: ["alloy", "datadog", "elk", "grafana", "loki", "mimir", "prometheus"],
+    keywords: [
+      "alloy",
+      "datadog",
+      "elk",
+      "grafana",
+      "loki",
+      "mimir",
+      "prometheus",
+    ],
   },
   {
     category: "Networking & Security",
-    keywords: ["aws waf", "ebpf", "haproxy", "istio", "kong", "network", "security", "xdp"],
+    keywords: [
+      "aws waf",
+      "ebpf",
+      "haproxy",
+      "istio",
+      "kong",
+      "network",
+      "security",
+      "xdp",
+    ],
   },
   {
     category: "CI/CD",
@@ -129,7 +153,19 @@ const SKILL_CATEGORY_RULES = [
   },
   {
     category: "Languages",
-    keywords: ["bash", "c++", "go", "hcl", "java", "javascript", "lua", "python", "rust", "swift", "typescript"],
+    keywords: [
+      "bash",
+      "c++",
+      "go",
+      "hcl",
+      "java",
+      "javascript",
+      "lua",
+      "python",
+      "rust",
+      "swift",
+      "typescript",
+    ],
   },
 ];
 
@@ -144,7 +180,11 @@ function normalizeRawText(rawText: string): string {
 }
 
 function canonicalizeHeading(line: string): string {
-  return line.toUpperCase().replace(/[^A-Z ]+/g, " ").replace(/\s+/g, " ").trim();
+  return line
+    .toUpperCase()
+    .replace(/[^A-Z ]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function resolveSectionName(line: string): ContentSection | null {
@@ -200,7 +240,9 @@ function looksLikePhone(line: string): boolean {
 }
 
 function looksLikeUrl(line: string): boolean {
-  return /(?:https?:\/\/)?(?:www\.)?[a-z0-9.-]+\.[a-z]{2,}(?:\/[^\s]*)?$/i.test(line);
+  return /(?:https?:\/\/)?(?:www\.)?[a-z0-9.-]+\.[a-z]{2,}(?:\/[^\s]*)?$/i.test(
+    line,
+  );
 }
 
 function normalizeUrl(rawUrl: string): string {
@@ -251,7 +293,10 @@ function parseLocation(line: string) {
     return null;
   }
 
-  const segments = compacted.split(",").map((segment) => segment.trim()).filter(Boolean);
+  const segments = compacted
+    .split(",")
+    .map((segment) => segment.trim())
+    .filter(Boolean);
   const city = segments[0] ?? "";
   const countryLabel = segments.at(-1)?.toLowerCase() ?? "";
   const countryCode = COUNTRY_CODE_MAP.get(countryLabel);
@@ -491,7 +536,9 @@ function mergeWrappedLines(lines: string[]): string[] {
     }
 
     if (shouldMergeWithPrevious(previous, line)) {
-      merged[merged.length - 1] = /-$/.test(previous) ? `${previous}${line}` : `${previous} ${line}`;
+      merged[merged.length - 1] = /-$/.test(previous)
+        ? `${previous}${line}`
+        : `${previous} ${line}`;
       continue;
     }
 
@@ -528,7 +575,10 @@ function collectSections(lines: string[]) {
   return sections;
 }
 
-function mergeBasics(contactBasics: ResumeBasics, headerBasics: ResumeBasics): ResumeBasics {
+function mergeBasics(
+  contactBasics: ResumeBasics,
+  headerBasics: ResumeBasics,
+): ResumeBasics {
   const profiles = new Map<string, ResumeProfile>();
 
   for (const profile of [...contactBasics.profiles, ...headerBasics.profiles]) {
@@ -545,7 +595,9 @@ function mergeBasics(contactBasics: ResumeBasics, headerBasics: ResumeBasics): R
       headerBasics.location.city || headerBasics.location.countryCode
         ? headerBasics.location
         : contactBasics.location,
-    profiles: [...profiles.values()].filter((profile) => profile.network !== "Website"),
+    profiles: [...profiles.values()].filter(
+      (profile) => profile.network !== "Website",
+    ),
   };
 }
 
@@ -554,7 +606,9 @@ function parseBasics(lines: string[]): ResumeBasics {
   const profiles = new Map<string, ResumeProfile>();
   const rawLines = lines.map((line) => line.trim()).filter(Boolean);
   const nonEmptyLines =
-    rawLines[0] && looksLikePersonName(rawLines[0]) ? mergeWrappedLines(rawLines) : rawLines;
+    rawLines[0] && looksLikePersonName(rawLines[0])
+      ? mergeWrappedLines(rawLines)
+      : rawLines;
 
   if (nonEmptyLines.length > 0 && looksLikePersonName(nonEmptyLines[0])) {
     basics.name = nonEmptyLines[0];
@@ -562,7 +616,9 @@ function parseBasics(lines: string[]): ResumeBasics {
 
   let cursor = basics.name ? 1 : 0;
   const labelCandidate = nonEmptyLines[cursor] ?? "";
-  const cleanedLabelCandidate = labelCandidate.replace(/\s*\([^)]*\)$/g, "").trim();
+  const cleanedLabelCandidate = labelCandidate
+    .replace(/\s*\([^)]*\)$/g, "")
+    .trim();
 
   if (
     cleanedLabelCandidate &&
@@ -640,7 +696,10 @@ function isLikelySummaryLine(line: string): boolean {
     return false;
   }
 
-  return wordCount <= 14 || /(platform|exchange|protocols|game|company|marketplace)/i.test(line);
+  return (
+    wordCount <= 14 ||
+    /(platform|exchange|protocols|game|company|marketplace)/i.test(line)
+  );
 }
 
 function isDurationOnlyLine(line: string): boolean {
@@ -651,7 +710,11 @@ function cleanCompanyName(name: string): string {
   return name.split("|")[0]?.trim() ?? name.trim();
 }
 
-function detectWorkHeader(lines: string[], index: number, currentCompany: string) {
+function detectWorkHeader(
+  lines: string[],
+  index: number,
+  currentCompany: string,
+) {
   const line = lines[index] ?? "";
   const nextLine = lines[index + 1] ?? "";
   const nextNextLine = lines[index + 2] ?? "";
@@ -668,7 +731,9 @@ function detectWorkHeader(lines: string[], index: number, currentCompany: string
       return null;
     }
 
-    const header = normalized.slice(0, normalized.lastIndexOf(dateMatch.groups.date)).trim();
+    const header = normalized
+      .slice(0, normalized.lastIndexOf(dateMatch.groups.date))
+      .trim();
     const [position, company] = header.split(/\s+·\s+/);
 
     if (!position || !company) {
@@ -714,7 +779,12 @@ function detectWorkHeader(lines: string[], index: number, currentCompany: string
     };
   }
 
-  if (currentCompany && looksLikeRoleTitle(line) && nextLine && parseDateRange(nextLine)) {
+  if (
+    currentCompany &&
+    looksLikeRoleTitle(line) &&
+    nextLine &&
+    parseDateRange(nextLine)
+  ) {
     return {
       company: currentCompany,
       nextIndex: index + 2,
@@ -776,7 +846,11 @@ function parseWork(lines: string[]): ResumeWork[] {
 
     currentCompany = header.company;
 
-    const content = collectWorkContent(mergedLines, header.nextIndex, currentCompany);
+    const content = collectWorkContent(
+      mergedLines,
+      header.nextIndex,
+      currentCompany,
+    );
     let summary = "";
     let highlights = content.items;
 
@@ -812,7 +886,9 @@ function parseEducation(lines: string[]): ResumeEducation[] {
       continue;
     }
 
-    const inlineMatch = nextLine.match(/^(?<descriptor>.+?)\s*·\s*\((?<dates>.+)\)$/);
+    const inlineMatch = nextLine.match(
+      /^(?<descriptor>.+?)\s*·\s*\((?<dates>.+)\)$/,
+    );
 
     if (inlineMatch?.groups) {
       const range = parseDateRange(inlineMatch.groups.dates);
@@ -849,7 +925,10 @@ function parseEducation(lines: string[]): ResumeEducation[] {
         /(?<date>(?:[A-Za-z]{3,9}\s+\d{4}|\d{4})\s*-\s*(?:[A-Za-z]{3,9}\s+\d{4}|\d{4}|Present))$/i,
       );
       const descriptorWithoutDates = dateMatch?.groups?.date
-        ? descriptor.slice(0, descriptor.lastIndexOf(dateMatch.groups.date)).replace(/·$/, "").trim()
+        ? descriptor
+            .slice(0, descriptor.lastIndexOf(dateMatch.groups.date))
+            .replace(/·$/, "")
+            .trim()
         : descriptor;
       const [studyType, area] = descriptorWithoutDates.includes(",")
         ? descriptorWithoutDates.split(",").map((value) => value.trim())
@@ -924,7 +1003,9 @@ function parseLanguages(lines: string[]): ResumeLanguage[] {
         .filter(Boolean),
     )
     .map((entry) => {
-      const hyphenMatch = entry.match(/^(?<language>.+?)\s*[-–]\s*(?<fluency>.+)$/);
+      const hyphenMatch = entry.match(
+        /^(?<language>.+?)\s*[-–]\s*(?<fluency>.+)$/,
+      );
 
       if (hyphenMatch?.groups) {
         return {
@@ -951,7 +1032,11 @@ function parsePublications(lines: string[]): ResumePublication[] {
   const merged = mergeWrappedLines(lines)
     .filter(Boolean)
     .reduce<string[]>((items, line) => {
-      if (items.length > 0 && !items.at(-1)?.includes("|") && !line.includes("|")) {
+      if (
+        items.length > 0 &&
+        !items.at(-1)?.includes("|") &&
+        !line.includes("|")
+      ) {
         items[items.length - 1] = `${items[items.length - 1]} ${line}`.trim();
         return items;
       }
@@ -961,14 +1046,14 @@ function parsePublications(lines: string[]): ResumePublication[] {
     }, []);
 
   return merged.map((line) => {
-      const parts = line.split("|").map((value) => value.trim());
+    const parts = line.split("|").map((value) => value.trim());
 
-      return {
-        name: parts[0] ?? line,
-        publisher: parts[1] ?? "",
-        releaseDate: parts[2] ? `${parts[2].slice(0, 4)}-01-01` : "",
-      };
-    });
+    return {
+      name: parts[0] ?? line,
+      publisher: parts[1] ?? "",
+      releaseDate: parts[2] ? `${parts[2].slice(0, 4)}-01-01` : "",
+    };
+  });
 }
 
 function parseAwards(lines: string[]): ResumeAward[] {
@@ -995,7 +1080,9 @@ export function parseLinkedInProfileText(rawText: string): ParsedResumeResult {
     .split("\n")
     .map((line) => line.trim())
     .filter((line) => line && !shouldDropLine(line));
-  const summaryIndex = cleanedLines.findIndex((line) => resolveSectionName(line) === "about");
+  const summaryIndex = cleanedLines.findIndex(
+    (line) => resolveSectionName(line) === "about",
+  );
   const experienceIndex = cleanedLines.findIndex(
     (line) => resolveSectionName(line) === "experience",
   );
@@ -1004,7 +1091,8 @@ export function parseLinkedInProfileText(rawText: string): ParsedResumeResult {
     .map((line, index) => ({ line, index }))
     .filter(
       ({ line, index }) =>
-        (nameSearchBoundary < 0 || index < nameSearchBoundary) && looksLikePersonName(line),
+        (nameSearchBoundary < 0 || index < nameSearchBoundary) &&
+        looksLikePersonName(line),
     );
   const nameIndex = nameCandidates.at(-1)?.index ?? -1;
 
@@ -1012,7 +1100,10 @@ export function parseLinkedInProfileText(rawText: string): ParsedResumeResult {
   const prefaceSections = collectSections(prefixLines);
   const basicsHeaderLines =
     nameIndex >= 0
-      ? cleanedLines.slice(nameIndex, summaryIndex > nameIndex ? summaryIndex : experienceIndex)
+      ? cleanedLines.slice(
+          nameIndex,
+          summaryIndex > nameIndex ? summaryIndex : experienceIndex,
+        )
       : [];
   const mainSections = collectSections(
     summaryIndex >= 0 ? cleanedLines.slice(summaryIndex) : cleanedLines,
@@ -1040,9 +1131,9 @@ export function parseLinkedInProfileText(rawText: string): ParsedResumeResult {
   ]);
   const work = parseWork(mainSections.experience ?? []);
   const education = parseEducation(mainSections.education ?? []);
-  const firstWorkLocation = mergeWrappedLines(mainSections.experience ?? []).find((line) =>
-    Boolean(parseLocation(line)),
-  );
+  const firstWorkLocation = mergeWrappedLines(
+    mainSections.experience ?? [],
+  ).find((line) => Boolean(parseLocation(line)));
 
   if (!basics.location.city && firstWorkLocation) {
     const location = parseLocation(firstWorkLocation);
@@ -1058,6 +1149,25 @@ export function parseLinkedInProfileText(rawText: string): ParsedResumeResult {
 
   if (skills.length === 0) {
     warnings.push("No Skills section detected.");
+  }
+
+  for (let index = 1; index < work.length; index += 1) {
+    const previous = work[index - 1];
+    const current = work[index];
+
+    if (
+      previous &&
+      current &&
+      previous.name === current.name &&
+      previous.highlights[0] &&
+      current.highlights[0] &&
+      previous.highlights[0] === current.highlights[0]
+    ) {
+      warnings.push(
+        `"${current.name}" has a duplicate highlight across promotion entries — LinkedIn often repeats the promotion sentence, review and dedupe.`,
+      );
+      break;
+    }
   }
 
   const resume: ResumeSchema = {

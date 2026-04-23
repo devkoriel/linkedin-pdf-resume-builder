@@ -8,7 +8,10 @@ describe("parseLinkedInProfileText", () => {
   it("maps a LinkedIn export into JSON Resume fields", () => {
     const result = parseLinkedInProfileText(linkedInProfileText);
 
-    expect(result.warnings).toEqual([]);
+    expect(result.warnings).toEqual([
+      expect.stringContaining("PUBG Corporation"),
+    ]);
+    expect(result.warnings[0]).toMatch(/duplicate highlight/i);
     expect(result.resume.basics.name).toBe("Alex Morgan");
     expect(result.resume.basics.label).toBe(
       "DevOps Engineer @ Chronicle | ex-Upbit, ex-PUBG | Kubernetes, GitOps & eBPF | Web3 Infrastructure",
@@ -77,7 +80,8 @@ describe("parseLinkedInProfileText", () => {
   });
 
   it("keeps nested role entries attached to the same company and repairs wrapped highlights", () => {
-    const result = parseLinkedInProfileText(`
+    const result = parseLinkedInProfileText(
+      `
 Alex Morgan
 DevOps Engineer
 Summary
@@ -114,7 +118,8 @@ Singapore
 Built JIRA and Confluence on in-house servers
 Top Skills
 Docker
-`.trim());
+`.trim(),
+    );
 
     expect(result.resume.work).toHaveLength(5);
     expect(result.resume.work[0]).toMatchObject({
@@ -142,6 +147,9 @@ Docker
     );
     expect(result.resume.work[2]?.highlights).toContain(
       "Migrated C++ build system to CMake, achieving 10x improvement in build time and binary size",
+    );
+    expect(result.warnings.some((w) => /duplicate highlight/i.test(w))).toBe(
+      false,
     );
   });
 });

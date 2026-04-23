@@ -10,7 +10,10 @@ function escapeHtml(value: string): string {
 }
 
 function displayUrl(url: string): string {
-  return url.replace(/^https?:\/\//i, "").replace(/^www\./i, "").replace(/\/$/, "");
+  return url
+    .replace(/^https?:\/\//i, "")
+    .replace(/^www\./i, "")
+    .replace(/\/$/, "");
 }
 
 function formatDate(dateString?: string): string {
@@ -36,7 +39,7 @@ function formatDate(dateString?: string): string {
 }
 
 function formatYear(dateString?: string): string {
-  return dateString ? formatDate(dateString).split(" ").at(-1) ?? "" : "";
+  return dateString ? (formatDate(dateString).split(" ").at(-1) ?? "") : "";
 }
 
 function renderWorkSection(resume: ResumeSchema): string {
@@ -91,7 +94,9 @@ function renderEducationSection(resume: ResumeSchema): string {
   const items = resume.education
     .map((entry) => {
       const dateRange = `${formatDate(entry.startDate)} – ${formatDate(entry.endDate)}`;
-      const descriptor = [entry.studyType, entry.area].filter(Boolean).join(" in ");
+      const descriptor = [entry.studyType, entry.area]
+        .filter(Boolean)
+        .join(" in ");
 
       return `
         <div class="entry-row">
@@ -125,11 +130,8 @@ function renderSimpleListSection(title: string, items: string[]): string {
   `;
 }
 
-export function buildResumeHtml(input: ResumeSchema): string {
+export function buildResumeBody(input: ResumeSchema): string {
   const resume = normalizeResume(input);
-  const pageInset = "20mm";
-  const screenPagePadding = pageInset;
-  const printPageMargin = pageInset;
   const contactParts = [
     resume.basics.email,
     resume.basics.phone,
@@ -197,7 +199,9 @@ export function buildResumeHtml(input: ResumeSchema): string {
   });
 
   const languagesLine = resume.languages
-    .map((entry) => `${escapeHtml(entry.language)} (${escapeHtml(entry.fluency)})`)
+    .map(
+      (entry) => `${escapeHtml(entry.language)} (${escapeHtml(entry.fluency)})`,
+    )
     .join(", ");
 
   const languagesSection = languagesLine
@@ -209,25 +213,41 @@ export function buildResumeHtml(input: ResumeSchema): string {
       `
     : "";
 
-  return `<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
+  return `<div class="page">
+      <h1>${escapeHtml(resume.basics.name)}</h1>
+      <div class="label">${escapeHtml(resume.basics.label)}</div>
+      <div class="contact">${contactParts.join(" &middot; ")}</div>
+      ${profileLinks ? `<div class="contact">${profileLinks}</div>` : ""}
+      <hr class="divider" />
+      ${resume.basics.summary ? `<div class="summary">${escapeHtml(resume.basics.summary)}</div>` : ""}
+      ${skillsSection}
+      ${renderWorkSection(resume)}
+      ${renderEducationSection(resume)}
+      ${renderSimpleListSection("PUBLICATIONS", publications)}
+      ${renderSimpleListSection("AWARDS", awards)}
+      ${languagesSection}
+    </div>`;
+}
+
+export function buildResumeStyles(): string {
+  const pageInset = "20mm";
+
+  return `<style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
-      @page { margin: ${printPageMargin}; size: A4; }
+      @page { margin: ${pageInset}; size: A4; }
       html { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: #ffffff; }
       body {
         background: #ffffff;
         color: #222222;
-        font-family: "Helvetica Neue", Arial, "Segoe UI", sans-serif;
+        font-family: "Helvetica Neue", Arial, "Segoe UI", "Noto Sans",
+          "Noto Sans KR", "Noto Sans JP", "Noto Sans SC", "Noto Sans TC",
+          "Arial Unicode MS", sans-serif;
         font-size: 9.5pt;
         line-height: 1.45;
         margin: 0;
       }
       a { color: #222222; text-decoration: none; }
-      .page { padding: ${screenPagePadding}; }
+      .page { padding: ${pageInset}; }
       @media print {
         .page { padding: 0; }
       }
@@ -336,23 +356,19 @@ export function buildResumeHtml(input: ResumeSchema): string {
         font-size: 8.5pt;
         line-height: 1.5;
       }
-    </style>
+    </style>`;
+}
+
+export function buildResumeHtml(input: ResumeSchema): string {
+  return `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    ${buildResumeStyles()}
   </head>
   <body>
-    <div class="page">
-      <h1>${escapeHtml(resume.basics.name)}</h1>
-      <div class="label">${escapeHtml(resume.basics.label)}</div>
-      <div class="contact">${contactParts.join(" &middot; ")}</div>
-      ${profileLinks ? `<div class="contact">${profileLinks}</div>` : ""}
-      <hr class="divider" />
-      ${resume.basics.summary ? `<div class="summary">${escapeHtml(resume.basics.summary)}</div>` : ""}
-      ${skillsSection}
-      ${renderWorkSection(resume)}
-      ${renderEducationSection(resume)}
-      ${renderSimpleListSection("PUBLICATIONS", publications)}
-      ${renderSimpleListSection("AWARDS", awards)}
-      ${languagesSection}
-    </div>
+    ${buildResumeBody(input)}
   </body>
 </html>`;
 }

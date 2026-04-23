@@ -11,19 +11,40 @@ describe("buildResumeHtml", () => {
     expect(html).toContain("Alex Morgan");
     expect(html).toContain("TECHNICAL SKILLS");
     expect(html).toContain("PROFESSIONAL EXPERIENCE");
-    expect(html).toContain("font-family: \"Helvetica Neue\", Arial, \"Segoe UI\", sans-serif;");
+    expect(html).toMatch(
+      /font-family:\s+"Helvetica Neue", Arial, "Segoe UI"[^;]*sans-serif;/,
+    );
     expect(html).toContain("@page { margin: 20mm; size: A4; }");
     expect(html).toContain(".page { padding: 20mm; }");
     expect(html).toContain("@media print {");
     expect(html).toContain(".page { padding: 0; }");
     expect(html).toContain("font-size: 8.5pt;");
     expect(html).toContain("letter-spacing: 0.8pt;");
-    expect(html).toContain("<strong>Container Orchestration:</strong> Kubernetes, EKS, kOps, Helm, ArgoCD");
+    expect(html).toContain(
+      "<strong>Container Orchestration:</strong> Kubernetes, EKS, kOps, Helm, ArgoCD",
+    );
     expect(html).toContain("Jan 2026 – Present");
-    expect(html).toContain("<div class=\"entry-sub\">Web3 oracle infrastructure for DeFi protocols.</div>");
+    expect(html).toContain(
+      '<div class="entry-sub">Web3 oracle infrastructure for DeFi protocols.</div>',
+    );
     expect(html.indexOf("TECHNICAL SKILLS")).toBeLessThan(
       html.indexOf("PROFESSIONAL EXPERIENCE"),
     );
+  });
+
+  it("renders CJK content without font-stack regressions", () => {
+    const html = buildResumeHtml({
+      ...sampleResume,
+      basics: {
+        ...sampleResume.basics,
+        name: "허진수",
+        summary: "서울에서 원격으로 일하는 DevOps 엔지니어.",
+      },
+    });
+
+    expect(html).toContain("허진수");
+    expect(html).toContain("서울에서 원격으로 일하는 DevOps 엔지니어.");
+    expect(html).toContain('"Noto Sans KR"');
   });
 
   it("escapes user-provided HTML to keep the rendered PDF safe", () => {

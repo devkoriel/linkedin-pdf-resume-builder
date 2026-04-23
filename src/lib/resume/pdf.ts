@@ -6,7 +6,10 @@ type BrowserLike = {
 type PageLike = {
   emulateMediaType: (type: "print" | "screen") => Promise<void>;
   pdf: (options: PdfOptions) => Promise<ArrayBuffer | Buffer | Uint8Array>;
-  setContent: (html: string, options: { waitUntil: "networkidle0" }) => Promise<void>;
+  setContent: (
+    html: string,
+    options: { waitUntil: "domcontentloaded" | "load" | "networkidle0" },
+  ) => Promise<void>;
   setViewport: (options: ViewportOptions) => Promise<void>;
 };
 
@@ -31,7 +34,9 @@ async function launchBrowser(browserBinding?: unknown): Promise<BrowserLike> {
   if (browserBinding) {
     const cloudflarePuppeteer = await import("@cloudflare/puppeteer");
 
-    return (await cloudflarePuppeteer.default.launch(browserBinding as never)) as BrowserLike;
+    return (await cloudflarePuppeteer.default.launch(
+      browserBinding as never,
+    )) as BrowserLike;
   }
 
   const puppeteer = await import("puppeteer");
@@ -50,17 +55,20 @@ function toNodeBuffer(value: ArrayBuffer | Buffer | Uint8Array): Buffer {
   return Buffer.from(value);
 }
 
-export async function renderResumePdf(html: string, browserBinding?: unknown): Promise<Buffer> {
+export async function renderResumePdf(
+  html: string,
+  browserBinding?: unknown,
+): Promise<Buffer> {
   const browser = await launchBrowser(browserBinding);
 
   try {
     const page = await browser.newPage();
     await page.setViewport({
-      width: 1195,
-      height: 1684,
+      width: 794,
+      height: 1123,
       deviceScaleFactor: 1,
     });
-    await page.setContent(html, { waitUntil: "networkidle0" });
+    await page.setContent(html, { waitUntil: "domcontentloaded" });
     await page.emulateMediaType("print");
 
     const pdfBuffer = await page.pdf({
