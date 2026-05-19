@@ -48,6 +48,16 @@ For the token, grant the minimum permissions needed to deploy the Worker and att
 4. Push to `main` or run the `Deploy to Cloudflare Workers` workflow manually.
 5. Confirm that `resumebuilder.koriel.kr` is attached as a Custom Domain in Workers.
 
+## Cloudflare Workers Builds settings
+
+If this repo is connected through Cloudflare Workers Builds, set the dashboard commands explicitly:
+
+- Build command: `npm run build:worker`
+- Deploy command: `npm run deploy:worker`
+- Non-production branch deploy command: `npm run upload:worker-version`
+
+The build command must run for every branch. Preview builds upload a Worker version without promoting it, so they still need the OpenNext `.open-next` output before `wrangler versions upload` runs.
+
 ## Useful commands
 
 ```bash
@@ -55,6 +65,7 @@ npm run test
 npm run typecheck
 npm run lint
 npm run build
+npm run build:worker
 npm run preview
 npm run deploy
 ```
