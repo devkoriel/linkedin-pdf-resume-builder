@@ -4,6 +4,7 @@
   "private": true,
   "description": "Upload a LinkedIn PDF export, convert it into JSON Resume, and render an ATS-friendly PDF.",
   "scripts": {
+    "postinstall": "node scripts/workers-ci-postinstall.mjs",
     "dev": "next dev",
     "build": "next build",
     "build:worker": "npx opennextjs-cloudflare build",

@@ -58,6 +58,8 @@ If this repo is connected through Cloudflare Workers Builds, set the dashboard c
 
 The build command must run for every branch. Preview builds upload a Worker version without promoting it, so they still need the OpenNext `.open-next` output before `wrangler versions upload` runs.
 
+The repo also includes a Workers Builds fallback in `scripts/workers-ci-postinstall.mjs`. When Cloudflare injects `WORKERS_CI=1`, the install step generates the OpenNext output so default preview deploys do not fail if the dashboard build command is missing. Set `SKIP_WORKERS_CI_POSTINSTALL_BUILD=1` to disable that fallback.
+
 ## Useful commands
 
 ```bash
