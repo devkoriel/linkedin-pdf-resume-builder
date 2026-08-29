@@ -47,7 +47,7 @@
     "lighthouse": "^13.1.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.4",
-    "wrangler": "4.83.0"
+    "wrangler": "4.127.1"
   },
   "overrides": {
     "postcss": "^8.5.10",
